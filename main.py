@@ -189,25 +189,25 @@ logIn.place(relx=0.705, rely=0, relwidth=0.285, relheight=0.07)
 
 
 #Day
-clicked = StringVar(root)
-clicked.set(datetime.now().strftime("%d"))
+clicked1 = StringVar(root)
+clicked1.set(datetime.now().strftime("%d"))
 
-drop = tk.OptionMenu(root, clicked, "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31")
+drop = tk.OptionMenu(root, clicked1, "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31")
 drop.place(relx=0.73, rely=0.22)
 
 #Month
-clicked = StringVar(root)
-clicked.set(datetime.now().strftime("%B"))
+clicked2 = StringVar(root)
+clicked2.set(datetime.now().strftime("%B"))
 
-drop2 = tk.OptionMenu(root, clicked, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+drop2 = tk.OptionMenu(root, clicked2, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 drop2.config(width=6)
 drop2.place(relx=0.771, rely=0.22)
 
 #Year
-clicked = StringVar(root)
-clicked.set(datetime.now().strftime("%Y"))
+clicked3 = StringVar(root)
+clicked3.set(datetime.now().strftime("%Y"))
 
-drop3 = tk.OptionMenu(root, clicked, "2021", "2022", "2023", "2024", "2025", "2026")
+drop3 = tk.OptionMenu(root, clicked3, "2021", "2022", "2023", "2024", "2025", "2026")
 drop3.place(relx=0.84, rely=0.22)
 
 #
@@ -275,7 +275,7 @@ hashtag3.place(relx=0.91, rely=0.5)
 myLable1 = Label(root, text="Select hashtag group", font =("Arial", 15), fg="Black")
 myLable1.place(relx=0.799, rely=0.45)
 
-# TODO: what time will it post, what day will it post, how long will it be until it post,
+# TODO: what time will it post,
 
 def getTime():
     global postTimeH
@@ -291,16 +291,30 @@ def getTime():
 
     postMinute = postTimeM.get()
     postHour = postTimeH.get()
-    postDay = clicked.get()
-    postMonth = clicked.get()
-    postYear = clicked.get()
+    postDay = clicked1.get()
+    postMonth = clicked2.get()
+    postYear = clicked3.get()
 
 def getFile():
     global postFile
     global lb
-
     postFile = lb.get(ACTIVE)
-    print(postFile)
+
+
+def postFinal():
+    print(postHour)
+    nowHour = (int(datetime.now().strftime("%H")))
+    nowMonth = (datetime.now().strftime("%B"))
+    nowDay = (int(datetime.now().strftime("%d")))
+    nowMinute = 100 * (int(datetime.now().strftime("%M")))
+    nowYear = (int(datetime.now().strftime("%Y")))
+
+    #if nowHour == int(postHour) and nowMonth == str(postMonth) and nowDay == int(postDay) and nowMinute == int(postMinute) and nowYear == int(postYear):
+    bot = Bot()
+    bot.login(username = postUser, password = postPass)
+    bot.upload_photo(postFile)
+
+
 
 def confirmPost():
     confirm = tkinterdnd2.Tk()
@@ -331,10 +345,25 @@ def confirmPost():
         error2.title("Error")
         label002 = Label(error, text=("Invalid time to post"))
         label002.pack()
+    lable16 = Label(confirm, text=("Date of post:"))
+    lable16.grid(row=2, column=0)
+    lable17 = Label(confirm, text=(str(postDay) + "/" +str(postMonth) + "/" + str(postYear)))
+    lable17.grid(row=2, column=1)
+    lable18 = Label(confirm, text=("Time of post:"))
+    lable18.grid(row=3, column=0)
+    lable19 = Label(confirm, text=(str(postHour) + ":" +str(postMinute)))
+    lable19.grid(row=3, column=1)
 
     getFile()
+    label13 = Label(confirm, text=("File:"))
+    label13.grid(row=4, column=0)
+    label14 = Label(confirm, text=(postFile))
+    label14.grid(row=4, column=1)
 
-#Confirm post button
+    #Final confim button
+    button02 = Button(confirm, text=("Confirm"), command = postFinal, fg = "green")
+    button02.grid(row=5, column=1)
+    #Confirm post button
 myButton = Button(root, text="Confirm", font =("Arial Bold", 25), command=confirmPost, fg="green", bg='blue')
 myButton.place(relx=0.705, rely=0.9, relheight=0.1, relwidth=0.288)
 
